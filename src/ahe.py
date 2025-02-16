@@ -9,5 +9,5 @@ import glob
 
 def get_bin_log_id():
     ''' find exsisting file number'''
-    files = glob.glob(f"{cfg.data_location}/*.bin")
+    files = glob.glob(f"{cfg.data_location}/*.mat")
     return len(files)
