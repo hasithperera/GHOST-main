@@ -62,7 +62,8 @@ void set_mincount(int fd, int mcount)
         printf("Error tcsetattr: %s\n", strerror(errno));
 }
 
-#define ports 2
+#define ports 4
+#define serial_root "/dev/ttyS%d"
 
 int main()
 {
@@ -74,7 +75,7 @@ int main()
     char buf[2][10];
 
 	for(int i=0;i<ports;i++){
-		sprintf(portname,"/dev/ttyUSB%d",i);
+		sprintf(portname,serial_root,i+1);
 		printf("%s\n",portname);
     	fd[i] = open(portname, O_RDWR | O_NOCTTY | O_SYNC);
     	if (fd[i] < 0) {
@@ -88,7 +89,7 @@ int main()
 	}
 
     
-    #pragma omp parallel num_threads(2)
+    #pragma omp parallel num_threads(ports)
 	{
         int thread_id = omp_get_thread_num();
 		int tmp;
