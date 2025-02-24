@@ -1,0 +1,64 @@
+"""
+
+@author: gh00019
+"""
+
+import serial
+import threading
+import csv
+import time
+
+# Configuration: list serial port names here
+SERIAL_PORTS = [
+    "/dev/ttyUSB0", "/dev/ttyUSB1", "/dev/ttyUSB2", "/dev/ttyUSB3",
+    "/dev/ttyUSB4", "/dev/ttyUSB5", "/dev/ttyUSB6", "/dev/ttyUSB7"
+]
+BAUD_RATE = 9600  # Update this as needed
+
+def read_serial(port, filename):
+    """Continuously read from a serial port and write to a CSV file framed by DEADDEAD markers."""
+    try:
+        ser = serial.Serial(port, BAUD_RATE, timeout=1)
+        with open(filename, "w", newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            # Write header marker (DEADDEAD)
+            writer.writerow(["DEADDEAD"])
+            # Optionally, include column headings (adjust as necessary)
+            writer.writerow(["Timestamp", "Data"])
+            
+            print(f"Started logging from {port} to {filename}")
+            while True:
+                line = ser.readline().decode('utf-8', errors='replace').strip()
+                if line:
+                    timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+                    writer.writerow([timestamp, line])
+    except Exception as e:
+        print(f"Error reading from {port}: {e}")
+    finally:
+        # Append footer marker (DEADDEAD) to the file
+        try:
+            with open(filename, "a", newline='') as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow(["DEADDEAD"])
+            print(f"Stopped logging from {port}. Footer written.")
+        except Exception as e:
+            print(f"Error writing footer for {port}: {e}")
+        try:
+            ser.close()
+        except Exception:
+            pass
+
+# Create and start a thread for each serial port.
+threads = []
+for i, port in enumerate(SERIAL_PORTS):
+    filename = f"data_port_{i}.csv"
+    t = threading.Thread(target=read_serial, args=(port, filename), daemon=True)
+    threads.append(t)
+    t.start()
+
+try:
+    while True:
+        time.sleep(1)
+except KeyboardInterrupt:
+    print("Terminating logging. Exiting program...")
+    # Threads will exit when their read fails or the program stops.
