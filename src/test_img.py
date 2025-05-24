@@ -13,7 +13,7 @@ UDP_PORT = 5000        # Receiver Port
 CHUNK_SIZE = 4096      # Must be <= 65507 for UDP
 
 # Read image and encode to bytes
-image = cv2.imread("cameraman.png")
+image = cv2.imread("in.png")
 
 
 
