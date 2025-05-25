@@ -103,7 +103,7 @@ t_start = time.time()
 for i in range(0,h):
 		
 	w_length = int(4040/20) 
-	data_packet = "imr{:4x}:".format(i)
+	data_packet = "imr{:3x}:".format(i)
 	sock.sendto(data_packet.encode('utf-8'),(UDP_IP, UDP_PORT)) #row-header
 	data2 = img2hex(gray,i)
 	for j in range(0,20):
