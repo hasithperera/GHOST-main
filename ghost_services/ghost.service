@@ -1,0 +1,14 @@
+[Unit]
+Description=GHOST telemetry system
+After=network-online.target
+
+[Service]
+ExecStart=/bin/bash /home/pi/GHOST-main/seq.sh
+WorkingDirectory=/home/pi/GHOST-main/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
