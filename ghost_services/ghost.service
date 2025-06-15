@@ -1,14 +1,13 @@
 [Unit]
 Description=GHOST telemetry system
-After=network-online.target
+After=local-fs.target
+Before=modprobe@.service
 
 [Service]
-ExecStart=/bin/bash /home/pi/GHOST-main/seq.sh
+Type=oneshot
+ExecStart=/home/pi/GHOST-main/seq.sh
 WorkingDirectory=/home/pi/GHOST-main/
-StandardOutput=inherit
-StandardError=inherit
-Restart=always
-User=pi
+RemainAfterExit=true
 
 [Install]
 WantedBy=multi-user.target

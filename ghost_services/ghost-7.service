@@ -1,0 +1,10 @@
+[Unit]
+Description=GHOST UDP
+After=ghost-udp.service
+
+[Service]
+ExecStart=socat -d -d /dev/ttyXR7,b115200,icanon UDP:127.0.0.2:5000
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
