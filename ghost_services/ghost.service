@@ -1,0 +1,13 @@
+[Unit]
+Description=GHOST telemetry system
+After=local-fs.target
+Before=modprobe@.service
+
+[Service]
+Type=oneshot
+ExecStart=/home/pi/GHOST-main/seq.sh
+WorkingDirectory=/home/pi/GHOST-main/
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target

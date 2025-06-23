@@ -1,0 +1,13 @@
+[Unit]
+Description=GHOST UDP
+After=network-online.target
+
+[Service]
+ExecStart=socat  UDP-RECV:5000 /dev/ttyXR0,raw,echo=0,b230400
+WorkingDirectory=/home/pi/GHOST-main/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
